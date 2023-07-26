@@ -7,7 +7,7 @@ from typing import Annotated
 
 from models.users import User, UserInDB
 from models.token_jwt import Token, TokenData
-
+from services.cars_srv import *
 
 #Tomado de https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/
 # to get a string like this run:
@@ -26,7 +26,6 @@ fake_users_db = {
         "disabled": False,
     }
 }
-
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -146,6 +145,12 @@ async def read_own_items(
 ):
     return [{"item_id": "Foo", "owner": current_user.username}]
 
+@app.post("/exportCsvToParquet")
+async def csv_to_parquet(
+    current_user: Annotated[User, Depends(get_current_active_user)]
+):
+    export_csv_to_parquet()
+    return True
 
 @app.get("/")
 def root():
