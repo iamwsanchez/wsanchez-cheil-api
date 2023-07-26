@@ -2,10 +2,12 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from pydantic import BaseModel
-
 from datetime import datetime, timedelta
 from typing import Annotated
+
+from models.users import User, UserInDB
+from models.token_jwt import Token, TokenData
+
 
 #Tomado de https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/
 # to get a string like this run:
@@ -24,25 +26,6 @@ fake_users_db = {
         "disabled": False,
     }
 }
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-
-class TokenData(BaseModel):
-    username: str | None = None
-
-
-class User(BaseModel):
-    username: str
-    email: str | None = None
-    full_name: str | None = None
-    disabled: bool | None = None
-
-
-class UserInDB(User):
-    hashed_password: str
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
