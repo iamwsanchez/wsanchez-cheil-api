@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -51,18 +52,18 @@ app = FastAPI( title="wsanchez-cheil-api",
     },
 )
 
-def application(environ, start_response):
-  if environ['REQUEST_METHOD'] == 'OPTIONS':
-    start_response(
-      '200 OK',
-      [
-        ('Content-Type', 'application/json'),
-        ('Access-Control-Allow-Origin', '*'),
-        ('Access-Control-Allow-Headers', 'Authorization, Content-Type'),
-        ('Access-Control-Allow-Methods', 'POST'),
-      ]
-    )
-    return ''
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -160,9 +161,14 @@ async def read_users_me(
 async def get_all_cars(current_user: Annotated[User, Depends(get_current_active_user)]):
     return read_csv()
 
+#@app.get("/cars/readAll")
+#async def read_all_cars(current_user: Annotated[User, Depends(get_current_active_user)]):
+#    return data_from_csv()
+
 @app.get("/cars/readAll")
-async def read_all_cars(current_user: Annotated[User, Depends(get_current_active_user)]):
+async def read_all_cars():
     return data_from_csv()
+
 
 @app.get("/")
 def profile():
