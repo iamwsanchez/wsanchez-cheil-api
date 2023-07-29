@@ -9,6 +9,7 @@ from typing import Annotated
 from models.users import User, UserInDB
 from models.token_jwt import Token, TokenData
 from services.cars_srv import *
+from services.vehicles_srv import *
 
 #Tomado de https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/
 # to get a string like this run:
@@ -169,6 +170,13 @@ async def get_all_cars(current_user: Annotated[User, Depends(get_current_active_
 async def read_all_cars():
     return data_from_csv()
 
+@app.get("/vehicles/getVehicleStd")
+async def get_vehicles_std():
+    return vehicles_std()
+
+@app.get("/vehicles/getVehicleMean")
+async def get_vehicles_mean():
+    return vehicles_mean()
 
 @app.get("/")
 def profile():
