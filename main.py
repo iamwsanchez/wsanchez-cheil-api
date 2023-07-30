@@ -167,16 +167,20 @@ async def get_all_cars(current_user: Annotated[User, Depends(get_current_active_
 #    return data_from_csv()
 
 @app.get("/cars/readAll")
-async def read_all_cars():
+async def read_all_cars(current_user: Annotated[User, Depends(get_current_active_user)]):
     return data_from_csv()
 
 @app.get("/vehicles/getVehicleStd")
-async def get_vehicles_std():
+async def get_vehicles_std(current_user: Annotated[User, Depends(get_current_active_user)]):
     return vehicles_std()
 
 @app.get("/vehicles/getVehicleMean")
-async def get_vehicles_mean():
+async def get_vehicles_mean(current_user: Annotated[User, Depends(get_current_active_user)]):
     return vehicles_mean()
+
+@app.get("/vehicles/getAllVehicles")
+async def get_all_vehicles(current_user: Annotated[User, Depends(get_current_active_user)]):
+    return all_vehicles()
 
 @app.get("/")
 def profile():

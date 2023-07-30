@@ -53,3 +53,8 @@ def vehicles_mean():
     pl.mean('hollows_ratio').round(0)).collect().to_dicts())
     
     return vh_list_mean
+
+def all_vehicles():
+    lf = pl.scan_csv('./data/vehicle.csv')
+    vh_list = list(lf.collect().to_dicts())
+    return vh_list
